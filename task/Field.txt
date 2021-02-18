@@ -1,0 +1,55 @@
+domain_status:Domain Status|Status|Status Information|Estatus Del Dominio
+domain_nserver:Name Server|Ns_Name_01|Dns|Nameserver|Server Name|Domain Idn Name|Host Name|Nameservers|Name Server Handle|Ns 1|Ns 2|Nserver|Serveur1-4|Dns Servers1|Dns Servers2|Domain Nameservers|Name Server Information|Name Servers Information|Name Servers In The Listed Order|Name Servers|Domain Servers In Listed Order
+domain_updated_date:Updated Date|Update Date|Last-Updated|Last-Update|Domain Last Updated Date|Last Update|Last Updated On|Modified|Derniere Modification|Updated On|Updated By
+domain_creation_date:Creation Date|Created|Created On|Created By|Domain Create Date|Domain Created|Date De Creation|Domain Name Commencement Date
+domain_expiration_date:Expiration Date|Expiry Date|Expires On|Domain Expiration Date|Domain Expires|Expires|Date D'Expiration
+registrar_domain_id:Registrar Domain Id|Registrar Id|Sponsoring Registrar Id|Registrar Handle|Registry Domain Id
+registrar_name:Registrar|Registrar Name|Sponsoring Registrar|Registrar-Name|Registrar_Name|Source|Registration Service Provider
+registrar_url:Registrar Url|Registrar Url (Registration Services)|Url
+registrar_iana_id:Registrar Iana Id|Sponsoring Registrar Iana Id
+registrar_updated_date:Updated Date|Last Updated By Registrar|Update Date|Updated-Date|Last Updated Date|Last Updated
+registrar_creation_date:Creation Date|Created-Date|Created Date|Date De Creation|Registar Created|Created By Registrar|Option Created|Registration Time|Registered Date|Registered On|Registered
+registrar_expiration_date:Expiration-Date|Registry Expiry Date|Expiry Date|Expiration Time|Expiration Date|Registrar Registration Expiration Date|Expiry Date
+registrar_abuse_email:Registrar Abuse Contact Email
+registrar_abuse_phone:Registrar Abuse Contact Phone
+registrant_id:Registry Registrant Id|Legal-C Handle|Registry Registrant Registrant Id|Cod Registrant
+registrant_name:Registrant Name|Registrant Internationalized Name|Registrant|Registrant-Name|Registrant_Contact_Name|Person|Company English Name (It Should Be The Same As The Registered/Corporation Name On Your Business Register Certificate Or Relevant Documents)
+registrant_org:Registrant Organization|Registrant-Organization|Organization Name|Registration Agent Organization|Nom Registrant|Org-Name
+registrant_street:Registrant Street|Registrant Address1|Registrant Address2|Registration Agent Address|Registration Agent Address2|Registrant'S Address|Adresse Registrant|Registrant-Street|Registrant_Contact_Address1|Org-Address|Registrant Internationalized Street|Registrant Street1|Registrant Street2|Registrant Street3|Address
+registrant_city:Registrant City|Registrant Internationalized City|Registrant-City|Registrant_Contact_City|Ville Registrant|Org-City
+registrant_prov:Registrant State/Province|Registrant Internationalized State|Registrant Province/State|Registrant State|Registrant State / Province|Registrant-State|Registrant_Contact_Province
+registrant_postal_code:Registrant Postal Code|Registrant-Zip|Registrant Zip Code|Registrant_Contact_Postalcode|Registrant Country Code|Org-Zipcode|Registrant Internationalized Postal Code
+registrant_country:Registrant Country|Registrant Internationalized Country|Registrant-Country|Registrant_Contact_Country|Pays Registrant|Registrant Country/Economy|Org-Country|Country
+registrant_phone:Registrant Phone|Registrant-Phone|Registrant_Contact_Phone|Registrant Phone Number|Registrant Voice Number|Telephone Registrant
+registrant_phone_ext:Registrant Phone Ext
+registrant_fax:Registrant Fax|Registrant-Fax|Registrant_Contact_Fax|Registrant Facsimile Number|Registrant Fax Number|Fax Registrant|Fax-No
+registrant_fax_ext:Registrant Fax Ext
+registrant_email:Registrant Email|Registrant-Email|Registrant_Contact_Email|Registrant E-Mail|Courriel Registrant|E-Mail|Email
+admin_id:Registry Admin Id|Registry Admin Registrant Id|Administrative Contact|Admin-C|Administrative Contact Id|Administrative Id|Administrative Contact(Ac)|Contact|Account Name
+admin_name:Admin Name|Admin-Name|Administrative Contact Person|Adm-Name|Administrative Contact Name|Administrative Name|Admin Internationalized Name|Admin_Contact_Name|Administrative Contact|Contact|Given name
+admin_org:Admin Organization|Admin-Organization|Administrative Organization|Admin Internationalized Organization|Nom Contact Admin
+admin_street:Admin Street|Admin-Street|Address|Adm-Address|Administrative Contact Address1|Administrative Address|Admin Internationalized Street|Admin_Contact_Address1
+admin_city:Admin City|Admin-City|Adm-City|Admin Internationalized City|Administrative Contact City|Admin_Contact_City|Administrative City
+admin_prov:Admin State/Province|Admin_Contact_Province|Admin-State|Admin Internationalized State|State|Administrative Contact State/Province|Administrative State/Province
+admin_postal_code:Admin Postal Code|Admin-Zip|Adm-Zipcode|Admin Internationalized Postal Code|Admin_Contact_Postalcode|Administrative Contact Postal Code|Administrative Postal Code
+admin_country:Admin Country|Admin-Country|Adm-Country|Admin Internationalized Country|Admin_Contact_Country|Administrative Contact Country|Administrative Country/Economy|Country
+admin_phone:Admin Phone|Admin-Phone|Admin Voice Number|Admin_Contact_Phone|Administrative Contact Phone Number|Administrative Phone|Telephone Contact Admin|Ac Phone Number|Tel
+admin_phone_ext:Admin Phone Ext|Administrative Phone Ext|Phone
+admin_fax:Admin Fax|Admin-Fax|Admin_Contact_Fax|Administrative Contact Facsimile Number|Administrative Fax|Fax Contact Admin|Fax
+admin_fax_ext:Admin Fax Ext|Administrative Fax Ext
+admin_email:Admin Email|Admin-Email|Adm-Email|Admin_Contact_Email|Administrative Contact Email|Administrative E-Mail|Administrative Email|Courriel Contact Admin|Ac E-Mail|Email
+tech_id:Registry Tech Id|Tech-C Handle|Tech-C|Registry Tech Registrant Id|Technical Id|Technical Contact|Pid|Registrar Technical Contacts
+tech_name:Tech Name|Tech-Name|Technical Contact Person|Tec-Name|Tech Internationalized Name|Technical_Contact_Name|Technical Contact|Company name
+tech_org:Tech Organization|Nom Contact Tech1|Nom Contact Tech2|Tech-Organization|Tech Internationalized Organization
+tech_street:Tech Street|Tech-Street|Address|Tec-Address|Tech Internationalized Street|Technical_Contact_Address1|Technical Address|Address
+tech_city:Tech City|Tec-City|Technical_Contact_City|Tech Internationalized City|Technical City
+tech_prov:Tech State/Province|Tech Internationalized State|Tech-State|Technical_Contact_Province
+tech_postal_code:Tech State/Province|Tec-Zipcode|Technical_Contact_Postalcode|Tech-Zip|Tech Internationalized Postal Code|Technical Postal Code
+tech_country:Tech Country|Tec-Country|Tech-Country|Technical_Contact_Country|Tech Internationalized Country|Technical Country/Economy|Country
+tech_phone:Tech Phone|Telephone Contact Tech2|Phone|Technical_Contact_Phone|Tech-Phone|Tech Voice Number|Technical Phone|Tel|Phone
+tech_phone_ext:Tech Phone Ext|Technical Phone Ext
+tech_fax:Tech Fax|Technical Fax|Tech-Fax|Fax Contact Tech1|Fax
+tech_fax_ext:Tech Fax Ext|Technical Fax Ext
+tech_email:Tech Email|Tech-Email|Tec-Email|Courriel Contact Tech1|Techical Email|Technical E-Mail|Email
+whois_server:Whois Server|Registrar Whois Server
+refer_url:Referral Url|Website
