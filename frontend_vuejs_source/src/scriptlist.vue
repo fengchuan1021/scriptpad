@@ -273,11 +273,11 @@
 			}
 		},
 		mounted() {
-			this.$axios.get("/api/Taskatmobilesoption/").then(ret=>{
+			this.$axios.get(DOMAIN+"api/Taskatmobilesoption/").then(ret=>{
 				this.atmobilesoption=ret.data;
 				this.atmobilesoption.forEach(item=>this.filteratmobiles.push({'text':item,'value':item}));
 				console.log(this.filteratmobiles);
-				this.$axios.get("/api/task/").then(ret => {
+				this.$axios.get(DOMAIN+"api/task/").then(ret => {
 				
 					this.tableData = ret.data;
 				});
@@ -421,7 +421,7 @@
 				}
 
 
-				this.$axios.post("/api/task/", this.task).then(ret => {
+				this.$axios.post(DOMAIN+"api/task/", this.task).then(ret => {
 					this.$notify({
 						title: '成功',
 						type: 'success',
@@ -435,7 +435,7 @@
 
 			},
 			previewtable() {
-				this.$axios.post("/api/tablepreview/", this.task.dbconfig).then(ret => {
+				this.$axios.post(DOMAIN+"api/tablepreview/", this.task.dbconfig).then(ret => {
 					this.sourcetablecolums = ret['data']['colums'];
 					this.sourcetablecolumsarr = [];
 					var tmparr = this.sourcetablecolumsarr;
@@ -463,7 +463,7 @@
 
 			},
 			tablenamesearch(queryString, cb) {
-				this.$axios.get('/api/tablesearch/?sourcetable=' + this.task.dbconfig.sourcetable).then(ret => {
+				this.$axios.get('api/tablesearch/?sourcetable=' + this.task.dbconfig.sourcetable).then(ret => {
 					cb(ret.data);
 				});
 

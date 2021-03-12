@@ -1,3 +1,4 @@
+
 <template>
 <el-row>
 	<el-col :span="5">
@@ -148,17 +149,22 @@
 		methods: {
 			setserverresult(){
 				this.serverresult=[];
-			
+			try{
 				for(let item of this.$store.state.servers){
 					
 					this.serverresult.push({'data':'','status':1,name:item.host_id});
 				}
+			}catch(e){
+				console.log('errorno servers');
+				//TODO handle the exception
+			}
+				
 			
 			},
 			execute(){
 			
 				this.serverresult=[];
-				var evtSource = new EventSource('/api/executecommand/'+this.command);
+				var evtSource = new EventSource('api/executecommand/'+this.command);
 				var vue=this;
 				evtSource.onmessage = function(e) {
 					let js=JSON.parse(e.data);
@@ -175,7 +181,7 @@
 			onSubmit() {
 				this.$refs.form.validate((valid) => {
 					if (valid) {
-						this.$axios.post('/api/vp/', this.form).then(ret => {
+						this.$axios.post('api/vp/', this.form).then(ret => {
 							if (ret.data && ret.data.id) {
 								let tmp = this.$store.state.servers;
 								tmp.unshift(ret.data);
@@ -199,7 +205,7 @@
 			},
 			update() {
 				this.reconnect();
-				this.$axios.get('/api/vp/').then(ret => {
+				this.$axios.get('api/vp/').then(ret => {
 					// console.log(ret.data);
 					this.$store.commit('setServers', ret.data.results);
 					this.setserverresult();
@@ -271,7 +277,7 @@
 			},
 			deleteserver(ind, item) {
 
-				this.$axios.delete('/api/vp/' + item.id + '/').then(ret => {
+				this.$axios.delete('api/vp/' + item.id + '/').then(ret => {
 					if (ret.status && ret.status == 204) {
 						//this.datas.splice(ind,1);
 						let tmp = this.$store.state.servers;

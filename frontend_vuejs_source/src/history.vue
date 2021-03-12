@@ -96,7 +96,7 @@
 			 },
 			 deletetask(history){
 				
-				this.$axios.get('/api/killtask/'+history.id+'/'+history.listname+'/').then(ret=>{
+				this.$axios.get('api/killtask/'+history.id+'/'+history.listname+'/').then(ret=>{
 									 console.log(ret.data);
 									 history.deleteflag=1;
 									 //this.historys=ret.data.results;
@@ -104,7 +104,7 @@
 			 },
 			 update(){
 				 console.log(1111111);
-				 this.$axios.get('/api/history/').then(ret=>{
+				 this.$axios.get('api/history/').then(ret=>{
 					 console.log(ret.data);
 					 this.historys=ret.data.results;
 				 });

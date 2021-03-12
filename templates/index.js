@@ -15541,7 +15541,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		},
 		switchcrontab(nval) {
 			let pk = this.task.pk;
-			this.$axios.put('/api/crontab/' + pk + '/', { 'status': nval }).then(ret => {
+			this.$axios.put('api/crontab/' + pk + '/', { 'status': nval }).then(ret => {
 				this.$notify({
 					title: ret.data.title,
 					type: 'success',
@@ -15552,7 +15552,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		},
 		update() {
 
-			this.$axios.get('/api/crontab/').then(ret => {
+			this.$axios.get('api/crontab/').then(ret => {
 				this.datas = ret.data;
 			});
 		},
@@ -15560,7 +15560,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		deletecrontab(ind, item) {
 			let pk = item.pk;
 			console.log(item);
-			this.$axios.delete('/api/crontab/' + pk + '/').then(ret => {
+			this.$axios.delete('api/crontab/' + pk + '/').then(ret => {
 
 				if (ret.status && ret.status == 200) {
 					this.datas.splice(ind, 1);
@@ -15754,7 +15754,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		},
 		deletetask(history) {
 
-			this.$axios.get('/api/killtask/' + history.id + '/' + history.listname + '/').then(ret => {
+			this.$axios.get('api/killtask/' + history.id + '/' + history.listname + '/').then(ret => {
 				console.log(ret.data);
 				history.deleteflag = 1;
 				//this.historys=ret.data.results;
@@ -15762,7 +15762,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		},
 		update() {
 			console.log(1111111);
-			this.$axios.get('/api/history/').then(ret => {
+			this.$axios.get('api/history/').then(ret => {
 				console.log(ret.data);
 				this.historys = ret.data.results;
 			});
@@ -16049,11 +16049,11 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		};
 	},
 	mounted() {
-		this.$axios.get("/api/Taskatmobilesoption/").then(ret => {
+		this.$axios.get(DOMAIN + "api/Taskatmobilesoption/").then(ret => {
 			this.atmobilesoption = ret.data;
 			this.atmobilesoption.forEach(item => this.filteratmobiles.push({ 'text': item, 'value': item }));
 			console.log(this.filteratmobiles);
-			this.$axios.get("/api/task/").then(ret => {
+			this.$axios.get(DOMAIN + "api/task/").then(ret => {
 
 				this.tableData = ret.data;
 			});
@@ -16173,7 +16173,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 				}
 			}
 
-			this.$axios.post("/api/task/", this.task).then(ret => {
+			this.$axios.post(DOMAIN + "api/task/", this.task).then(ret => {
 				this.$notify({
 					title: '成功',
 					type: 'success',
@@ -16183,7 +16183,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 			});
 		},
 		previewtable() {
-			this.$axios.post("/api/tablepreview/", this.task.dbconfig).then(ret => {
+			this.$axios.post(DOMAIN + "api/tablepreview/", this.task.dbconfig).then(ret => {
 				this.sourcetablecolums = ret['data']['colums'];
 				this.sourcetablecolumsarr = [];
 				var tmparr = this.sourcetablecolumsarr;
@@ -16209,7 +16209,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 			this.previewtable();
 		},
 		tablenamesearch(queryString, cb) {
-			this.$axios.get('/api/tablesearch/?sourcetable=' + this.task.dbconfig.sourcetable).then(ret => {
+			this.$axios.get('api/tablesearch/?sourcetable=' + this.task.dbconfig.sourcetable).then(ret => {
 				cb(ret.data);
 			});
 		},
@@ -16237,6 +16237,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_clone__ = __webpack_require__(152);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_clone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_clone__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__console_vue__ = __webpack_require__(269);
+//
 //
 //
 //
@@ -16383,16 +16384,20 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 	methods: {
 		setserverresult() {
 			this.serverresult = [];
+			try {
+				for (let item of this.$store.state.servers) {
 
-			for (let item of this.$store.state.servers) {
-
-				this.serverresult.push({ 'data': '', 'status': 1, name: item.host_id });
+					this.serverresult.push({ 'data': '', 'status': 1, name: item.host_id });
+				}
+			} catch (e) {
+				console.log('errorno servers');
+				//TODO handle the exception
 			}
 		},
 		execute() {
 
 			this.serverresult = [];
-			var evtSource = new EventSource('/api/executecommand/' + this.command);
+			var evtSource = new EventSource('api/executecommand/' + this.command);
 			var vue = this;
 			evtSource.onmessage = function (e) {
 				let js = JSON.parse(e.data);
@@ -16407,7 +16412,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		onSubmit() {
 			this.$refs.form.validate(valid => {
 				if (valid) {
-					this.$axios.post('/api/vp/', this.form).then(ret => {
+					this.$axios.post('api/vp/', this.form).then(ret => {
 						if (ret.data && ret.data.id) {
 							let tmp = this.$store.state.servers;
 							tmp.unshift(ret.data);
@@ -16431,7 +16436,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		},
 		update() {
 			this.reconnect();
-			this.$axios.get('/api/vp/').then(ret => {
+			this.$axios.get('api/vp/').then(ret => {
 				// console.log(ret.data);
 				this.$store.commit('setServers', ret.data.results);
 				this.setserverresult();
@@ -16497,7 +16502,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 		},
 		deleteserver(ind, item) {
 
-			this.$axios.delete('/api/vp/' + item.id + '/').then(ret => {
+			this.$axios.delete('api/vp/' + item.id + '/').then(ret => {
 				if (ret.status && ret.status == 204) {
 					//this.datas.splice(ind,1);
 					let tmp = this.$store.state.servers;
@@ -16757,7 +16762,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_history_vue__ = __webpack_require__(78);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b56512c8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_history_vue__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_9d80bf70_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_history_vue__ = __webpack_require__(279);
 function injectStyle (ssrContext) {
   __webpack_require__(289)
   __webpack_require__(290)
@@ -16778,7 +16783,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_history_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b56512c8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_history_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_9d80bf70_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_history_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -16795,11 +16800,11 @@ var Component = normalizeComponent(
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_servers_vue__ = __webpack_require__(80);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_31aff86e_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_servers_vue__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_616bc3d6_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_servers_vue__ = __webpack_require__(276);
 function injectStyle (ssrContext) {
-  __webpack_require__(282)
   __webpack_require__(283)
   __webpack_require__(284)
+  __webpack_require__(285)
 }
 var normalizeComponent = __webpack_require__(11)
 /* script */
@@ -16812,12 +16817,12 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-31aff86e"
+var __vue_scopeId__ = "data-v-616bc3d6"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_servers_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_31aff86e_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_servers_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_616bc3d6_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_servers_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -21794,7 +21799,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "#app{font-family:Helvetica,sans-serif;text-align:center}.el-autocomplete .el-input{width:400px}#smalltable{line-height:11px;padding:3px;padding-left:1px}#smalltable .cell{line-height:11px;padding-left:1px;padding-right:1px;height:15px;word-break:keep-all;text-overflow:unset;overflow-x:scroll}#scripttable .el-table__body{width:80%}.el-table_1_column_4{display:none}#smalltable .cell::-webkit-scrollbar{display:none}", ""]);
 
 // exports
 
@@ -21808,7 +21813,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ".el-table td,.el-table th{padding:0}.el-input{width:200px}", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -21822,7 +21827,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ".item[data-v-31aff86e]{margin-left:5px;padding:5px}", ""]);
+exports.push([module.i, ".el-table td,.el-table th{padding:0}.el-input{width:200px}", ""]);
 
 // exports
 
@@ -21836,7 +21841,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "#app{font-family:Helvetica,sans-serif;text-align:center}.el-autocomplete .el-input{width:400px}#smalltable{line-height:11px;padding:3px;padding-left:1px}#smalltable .cell{line-height:11px;padding-left:1px;padding-right:1px;height:15px;word-break:keep-all;text-overflow:unset;overflow-x:scroll}#scripttable .el-table__body{width:80%}.el-table_1_column_4{display:none}#smalltable .cell::-webkit-scrollbar{display:none}", ""]);
+exports.push([module.i, ".item[data-v-616bc3d6]{margin-left:5px;padding:5px}", ""]);
 
 // exports
 
@@ -30883,7 +30888,7 @@ module.exports = __webpack_require__.p + "535877f50039c0cb49a6196a5b7517cd.woff"
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_codeeditor_vue__ = __webpack_require__(74);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_31ba5338_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_codeeditor_vue__ = __webpack_require__(275);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_31ba5338_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_codeeditor_vue__ = __webpack_require__(274);
 var normalizeComponent = __webpack_require__(11)
 /* script */
 
@@ -30954,7 +30959,7 @@ var Component = normalizeComponent(
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_crontab_vue__ = __webpack_require__(76);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7b9f16b4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_crontab_vue__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_730bb757_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_crontab_vue__ = __webpack_require__(277);
 function injectStyle (ssrContext) {
   __webpack_require__(286)
   __webpack_require__(287)
@@ -30975,7 +30980,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_crontab_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7b9f16b4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_crontab_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_730bb757_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_crontab_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -31029,9 +31034,9 @@ var Component = normalizeComponent(
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_scriptlist_vue__ = __webpack_require__(79);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6d430054_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_scriptlist_vue__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5fc5c1a5_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_scriptlist_vue__ = __webpack_require__(275);
 function injectStyle (ssrContext) {
-  __webpack_require__(285)
+  __webpack_require__(282)
 }
 var normalizeComponent = __webpack_require__(11)
 /* script */
@@ -31049,7 +31054,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_scriptlist_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6d430054_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_scriptlist_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5fc5c1a5_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_scriptlist_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -31074,7 +31079,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-row',[_c('el-col',{attrs:{"span":5}},[_c('div',[_c('div',[_c('el-button',{attrs:{"size":"mini","type":"primary","icon":"el-icon-arrow-" +( _vm.showform ? "up" : "down")},on:{"click":function($event){_vm.showform=_vm.showform^1}}})],1),_vm._v(" "),_c('el-form',{directives:[{name:"show",rawName:"v-show",value:(_vm.showform),expression:"showform"}],ref:"form",attrs:{"model":_vm.form,"rules":_vm.rules,"label-position":"left","label-width":"90px"}},[_c('el-form-item',{attrs:{"label":"host_id"}},[_c('el-input',{model:{value:(_vm.form.host_id),callback:function ($$v) {_vm.$set(_vm.form, "host_id", $$v)},expression:"form.host_id"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"ip"}},[_c('el-input',{model:{value:(_vm.form.ip),callback:function ($$v) {_vm.$set(_vm.form, "ip", $$v)},expression:"form.ip"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"username"}},[_c('el-input',{model:{value:(_vm.form.username),callback:function ($$v) {_vm.$set(_vm.form, "username", $$v)},expression:"form.username"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"password"}},[_c('el-input',{model:{value:(_vm.form.password),callback:function ($$v) {_vm.$set(_vm.form, "password", $$v)},expression:"form.password"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"port"}},[_c('el-input',{model:{value:(_vm.form.port),callback:function ($$v) {_vm.$set(_vm.form, "port", $$v)},expression:"form.port"}})],1),_vm._v(" "),_c('el-form-item',[_c('el-button',{attrs:{"type":"primary"},on:{"click":_vm.onSubmit}},[_vm._v("提交")])],1)],1),_vm._v(" "),_c('el-table',{staticStyle:{"width":"100%"},attrs:{"data":_vm.$store.state.servers},on:{"cell-dblclick":_vm.connect}},[_c('el-table-column',{attrs:{"prop":"host_id","label":"host_id"}}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"ip","label":"ip"}}),_vm._v(" "),_c('el-table-column',{attrs:{"label":"操作"},scopedSlots:_vm._u([{key:"default",fn:function(scope){return [_c('el-button',{attrs:{"size":"mini"},on:{"click":function($event){return _vm.deleteserver(scope.$index, scope.row)}}},[_vm._v("X")])]}}])})],1)],1)]),_vm._v(" "),_c('el-col',{attrs:{"span":19}},[_c('el-tabs',{attrs:{"type":"card","editable":""},on:{"edit":_vm.handleTabsEdit},model:{value:(_vm.editableTabsValue),callback:function ($$v) {_vm.editableTabsValue=$$v},expression:"editableTabsValue"}},_vm._l((_vm.connections),function(item,index){return _c('el-tab-pane',{key:index,attrs:{"name":item.name}},[_c('span',{attrs:{"slot":"label"},slot:"label"},[_c('i',{class:item.status}),_vm._v(" "+_vm._s(item.name))]),_vm._v(" "),_c('myconsole',{ref:item.name,refInFor:true,attrs:{"item":item},on:{"sendmsg":function($event){return _vm.sendmsg($event,item.name)}}})],1)}),1),_vm._v(" "),_c('div',[_c('span',[_vm._v("命令:")]),_vm._v(" "),_c('el-input',{staticStyle:{"width":"600px"},attrs:{"id":"command"},model:{value:(_vm.command),callback:function ($$v) {_vm.command=$$v},expression:"command"}}),_c('el-button',{attrs:{"size":"mini","type":"primary"},on:{"click":_vm.execute}},[_vm._v("批量执行")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px"}},_vm._l((_vm.serverresult),function(item,ind){return _c('el-popover',{attrs:{"placement":"bottom","width":"400","trigger":"hover"}},[_c('div',[_vm._v(_vm._s(item.data))]),_vm._v(" "),_c('el-button',{staticClass:"item",attrs:{"slot":"reference","type":item.status==0 ? 'success' : item.status==-1 ? 'danger' : 'warning',"size":"mini"},slot:"reference"},[_vm._v(_vm._s(item.name))])],1)}),1)],1)],1)}
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('codemirror',{attrs:{"name":_vm.name,"options":_vm.cmOptions},model:{value:(_vm.data),callback:function ($$v) {_vm.data=$$v},expression:"data"}})}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
@@ -31084,7 +31089,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('codemirror',{attrs:{"name":_vm.name,"options":_vm.cmOptions},model:{value:(_vm.data),callback:function ($$v) {_vm.data=$$v},expression:"data"}})}
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-row',[_c('el-col',{attrs:{"span":7}},[_c('div',[_c('el-radio-group',{attrs:{"size":"mini"},on:{"change":_vm.filterscript},model:{value:(_vm.tmpradio1),callback:function ($$v) {_vm.tmpradio1=$$v},expression:"tmpradio1"}},[_c('el-radio-button',{attrs:{"label":""}},[_vm._v("全部")]),_vm._v(" "),_vm._l((_vm.filteratmobiles),function(data,ind){return _c('el-radio-button',{key:ind,attrs:{"label":data.text}})})],2)],1),_vm._v(" "),_c('div',[_c('el-input',{attrs:{"placeholder":"输入脚本名称或文件名搜索","clearable":""},on:{"input":_vm.serchscriptchange},model:{value:(_vm.serchscript),callback:function ($$v) {_vm.serchscript=$$v},expression:"serchscript"}})],1),_vm._v(" "),_c('el-table',{ref:"scripttable",staticStyle:{"width":"90%"},attrs:{"data":_vm.tableData,"highlight-current-row":""},on:{"current-change":_vm.handleTableChange}},[_c('el-table-column',{attrs:{"type":"index","min-width":"2%"}}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"name","label":"名称","min-width":"78%","filter-placement":"bottom-end","filter-method":_vm.filterHandler1},scopedSlots:_vm._u([{key:"default",fn:function(scope){return [_c('el-popover',{attrs:{"trigger":"hover","placement":"top"}},[_c('p',[_vm._v("文件名: "+_vm._s(scope.row.filename))]),_vm._v(" "),_c('div',{staticClass:"name-wrapper",attrs:{"slot":"reference"},slot:"reference"},[_c('span',[_vm._v(_vm._s(scope.row.name))])])])]}}])}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"atmobiles","label":"负责人","min-width":"20%","filter-placement":"bottom-end","filters":_vm.filteratmobiles,"filter-method":_vm.filterHandler,"filter-multiple":false}}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"filename","label":"文件名称","min-width":"2%","filter-placement":"bottom-end","filter-method":_vm.filterHandler1}})],1)],1),_vm._v(" "),_c('el-col',{attrs:{"span":17}},[_c('div',[_c('label',[_vm._v("脚本名称:")]),_c('span',[_vm._v(_vm._s(_vm.task.name))]),_vm._v(" "),_c('label',[_vm._v("版本:")]),_c('span',[_vm._v(_vm._s(_vm.task.version))])]),_vm._v(" "),_c('div',[_c('h3',{staticStyle:{"color":"red"}},[_vm._v(_vm._s(_vm.task.mark))])]),_vm._v(" "),_c('div',[_c('label',[_vm._v("源数据表:")]),_vm._v(" "),_c('el-autocomplete',{staticClass:"inline-input",staticStyle:{"width":"500px"},attrs:{"fetch-suggestions":_vm.tablenamesearch,"placeholder":"请输入内容","trigger-on-focus":false},on:{"select":_vm.sourcetablenameSelect},model:{value:(_vm.task.dbconfig.sourcetable),callback:function ($$v) {_vm.$set(_vm.task.dbconfig, "sourcetable", $$v)},expression:"task.dbconfig.sourcetable"}}),_vm._v(" "),_c('label',[_vm._v("源数据库ip:")]),_c('span',[_vm._v(_vm._s(_vm.task.dbconfig.databaseip))]),_vm._v(" "),_c('label',[_vm._v("源数据库端口:")]),_c('span',[_vm._v(_vm._s(_vm.task.dbconfig.databaseport))]),_vm._v(" "),_c('label',[_vm._v("源数据库:")]),_c('span',[_vm._v(_vm._s(_vm.task.dbconfig.database))])],1),_vm._v(" "),_c('h4',[_vm._v("数据预览")]),_vm._v(" "),(_vm.sourcetablecolums)?_c('div',{staticStyle:{"margin-left":"50px"}},[_c('span',[_vm._v("筛选原数据表中的数据")]),_vm._v(" "),_c('div',[_c('span',[_vm._v("sql:")]),_vm._v(_vm._s(_vm.task.dbconfig.condition))]),_vm._v(" "),_vm._l((_vm.task.dbconfig.conditionarr),function(item,index){return _c('filtertable',{key:index,attrs:{"sourcetablecolums":_vm.sourcetablecolums,"conditionindex":index},on:{"deleteindex":_vm.deletecondition,"onchange":_vm.conditionvaluechange}})}),_vm._v(" "),_c('div',[_c('el-button',{on:{"click":function($event){return _vm.addnewcondition()}}},[_vm._v("\n\t\t\t\t\t\t<添加>\n\t\t\t\t\t")])],1)],2):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"50px"}},[_c('el-table',{attrs:{"data":_vm.sourcetableData,"id":"smalltable","border":"","width":"100%"}},_vm._l((_vm.sourcetablecolums),function(col){return _c('el-table-column',{key:col.name,staticStyle:{"max-width":"160px"},attrs:{"label":col.name,"prop":col.name,"width":_vm.calcwidth(col.name)}})}),1)],1),_vm._v(" "),_c('div',[_c('div',[_c('span',[_vm._v("要执行的服务器")]),_vm._v(" "),_c('el-button',{attrs:{"size":"mini"},on:{"click":_vm.xorservers}},[_vm._v("反选")]),_vm._v(" "),_c('el-button',{attrs:{"size":"mini"},on:{"click":_vm.selectallservers}},[_vm._v("全选")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"50px"}},[_c('el-checkbox-group',{model:{value:(_vm.task.servers),callback:function ($$v) {_vm.$set(_vm.task, "servers", $$v)},expression:"task.servers"}},_vm._l((_vm.$store.state.servers),function(data,ind){return _c('el-checkbox',{key:ind,attrs:{"label":data.host_id,"keys":ind,"checked":true}})}),1)],1)]),_vm._v(" "),(Object.keys(_vm.task.args).length)?_c('div',[_c('div',[_vm._v("参数")]),_vm._v(" "),_vm._l((_vm.task.args),function(arg){return _c('div',{staticStyle:{"padding":"5px","margin-left":"50px"}},[_c('span',[_vm._v(_vm._s(arg.alisaname ? arg.alisaname : arg.name))]),_vm._v(" "),(arg.style=='radio')?[_vm._l((arg.options),function(opt){return [_c('el-radio',{attrs:{"label":opt.value},model:{value:(arg.value),callback:function ($$v) {_vm.$set(arg, "value", $$v)},expression:"arg.value"}},[_vm._v(_vm._s(opt.name))])]})]:_c('el-input',{staticStyle:{"width":"300px"},attrs:{"maxlength":"60","show-word-limit":""},model:{value:(arg.value),callback:function ($$v) {_vm.$set(arg, "value", $$v)},expression:"arg.value"}})],2)})],2):_vm._e(),_vm._v(" "),(Object.keys(_vm.task.inputcolums).length && _vm.sourcetablecolums.length)?_c('div',[_c('div',[_vm._v("数据输入")]),_vm._v(" "),_vm._l((_vm.task.inputcolums),function(inputcolum){return _c('div',{staticStyle:{"padding":"5px","margin-left":"50px"}},[_c('div',[_c('span',[_vm._v(_vm._s(inputcolum.name)+"<=")]),_vm._v(" "),_vm._l((_vm.sourcetablecolums),function(colum,index){return _c('el-radio',{key:index,attrs:{"label":colum.name},model:{value:(inputcolum.value),callback:function ($$v) {_vm.$set(inputcolum, "value", $$v)},expression:"inputcolum.value"}},[_vm._v(_vm._s(colum.name))])})],2),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.sourcetablecolumsarr.indexOf(inputcolum.value)==-1),expression:"sourcetablecolumsarr.indexOf(inputcolum.value)==-1"}],staticStyle:{"color":"red"}},[_vm._v("请选择字段")])])})],2):_vm._e(),_vm._v(" "),(Object.keys(_vm.task.outputcolums).length)?_c('div',[_c('div',[_vm._v("输出和字段调整")]),_vm._v(" "),_vm._l((_vm.task.outputcolums),function(outputcolum){return _c('div',{staticStyle:{"margin-left":"50px"}},[_c('div',{staticStyle:{"padding":"5px"}},[_vm._v("\n\t\t\t\t\t\t"+_vm._s(outputcolum.name)+"\n\t\t\t\t\t\t"),_c('el-radio',{attrs:{"label":"1"},model:{value:(outputcolum.addnewcolum),callback:function ($$v) {_vm.$set(outputcolum, "addnewcolum", $$v)},expression:"outputcolum.addnewcolum"}},[_vm._v("在原表新增字段")]),_vm._v(" "),_c('el-radio',{attrs:{"label":"0"},model:{value:(outputcolum.addnewcolum),callback:function ($$v) {_vm.$set(outputcolum, "addnewcolum", $$v)},expression:"outputcolum.addnewcolum"}},[_vm._v("使用原有字段")])],1),_vm._v(" "),(outputcolum.addnewcolum=='1')?_c('div',{staticStyle:{"padding":"5px"}},[_vm._v(_vm._s(outputcolum.name)+"=>"),_c('el-input',{staticStyle:{"width":"160px"},model:{value:(outputcolum.value),callback:function ($$v) {_vm.$set(outputcolum, "value", $$v)},expression:"outputcolum.value"}}),_vm._v("  "+_vm._s(_vm.dynamicalter(outputcolum)))],1):_vm._e(),_vm._v(" "),(outputcolum.addnewcolum=='0')?_c('div',{staticStyle:{"padding":"5px"}},_vm._l((_vm.sourcetablecolums),function(colum,index){return _c('el-radio',{key:index,attrs:{"label":colum.name},model:{value:(outputcolum.value),callback:function ($$v) {_vm.$set(outputcolum, "value", $$v)},expression:"outputcolum.value"}},[_vm._v(_vm._s(colum.name))])}),1):_vm._e()])})],2):_vm._e(),_vm._v(" "),(_vm.task.cron)?_c('div',[_c('span',[_c('el-checkbox',{model:{value:(_vm.task.cron.enabled),callback:function ($$v) {_vm.$set(_vm.task.cron, "enabled", $$v)},expression:"task.cron.enabled"}},[_vm._v("定时执行")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"50px"}},[_vm._v("\n\t\t\t\t定时执行条件:"),_c('el-input',{model:{value:(_vm.task.cron.expression),callback:function ($$v) {_vm.$set(_vm.task.cron, "expression", $$v)},expression:"task.cron.expression"}}),_vm._v("(和crontab 定时执行语法一致)\n\n\t\t\t")],1)]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"20px"}},[_c('div',[_vm._v("完成后通知:")]),_vm._v(" "),_c('el-checkbox-group',{staticStyle:{"margin-left":"50px"},model:{value:(_vm.task.atmobiles),callback:function ($$v) {_vm.$set(_vm.task, "atmobiles", $$v)},expression:"task.atmobiles"}},_vm._l((_vm.atmobilesoption),function(data,ind){return _c('el-checkbox',{key:ind,attrs:{"label":data,"keys":ind}})}),1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"200px","margin-top":"20px"}},[_c('el-button',{attrs:{"type":"primary","disabled":_vm.disablebutton},on:{"click":_vm.begintask}},[_vm._v("开始任务")])],1)])],1)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
@@ -31094,7 +31099,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-row',[_c('el-col',{attrs:{"span":7}},[_c('div',[_c('el-radio-group',{attrs:{"size":"mini"},on:{"change":_vm.filterscript},model:{value:(_vm.tmpradio1),callback:function ($$v) {_vm.tmpradio1=$$v},expression:"tmpradio1"}},[_c('el-radio-button',{attrs:{"label":""}},[_vm._v("全部")]),_vm._v(" "),_vm._l((_vm.filteratmobiles),function(data,ind){return _c('el-radio-button',{key:ind,attrs:{"label":data.text}})})],2)],1),_vm._v(" "),_c('div',[_c('el-input',{attrs:{"placeholder":"输入脚本名称或文件名搜索","clearable":""},on:{"input":_vm.serchscriptchange},model:{value:(_vm.serchscript),callback:function ($$v) {_vm.serchscript=$$v},expression:"serchscript"}})],1),_vm._v(" "),_c('el-table',{ref:"scripttable",staticStyle:{"width":"90%"},attrs:{"data":_vm.tableData,"highlight-current-row":""},on:{"current-change":_vm.handleTableChange}},[_c('el-table-column',{attrs:{"type":"index","min-width":"2%"}}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"name","label":"名称","min-width":"78%","filter-placement":"bottom-end","filter-method":_vm.filterHandler1},scopedSlots:_vm._u([{key:"default",fn:function(scope){return [_c('el-popover',{attrs:{"trigger":"hover","placement":"top"}},[_c('p',[_vm._v("文件名: "+_vm._s(scope.row.filename))]),_vm._v(" "),_c('div',{staticClass:"name-wrapper",attrs:{"slot":"reference"},slot:"reference"},[_c('span',[_vm._v(_vm._s(scope.row.name))])])])]}}])}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"atmobiles","label":"负责人","min-width":"20%","filter-placement":"bottom-end","filters":_vm.filteratmobiles,"filter-method":_vm.filterHandler,"filter-multiple":false}}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"filename","label":"文件名称","min-width":"2%","filter-placement":"bottom-end","filter-method":_vm.filterHandler1}})],1)],1),_vm._v(" "),_c('el-col',{attrs:{"span":17}},[_c('div',[_c('label',[_vm._v("脚本名称:")]),_c('span',[_vm._v(_vm._s(_vm.task.name))]),_vm._v(" "),_c('label',[_vm._v("版本:")]),_c('span',[_vm._v(_vm._s(_vm.task.version))])]),_vm._v(" "),_c('div',[_c('h3',{staticStyle:{"color":"red"}},[_vm._v(_vm._s(_vm.task.mark))])]),_vm._v(" "),_c('div',[_c('label',[_vm._v("源数据表:")]),_vm._v(" "),_c('el-autocomplete',{staticClass:"inline-input",staticStyle:{"width":"500px"},attrs:{"fetch-suggestions":_vm.tablenamesearch,"placeholder":"请输入内容","trigger-on-focus":false},on:{"select":_vm.sourcetablenameSelect},model:{value:(_vm.task.dbconfig.sourcetable),callback:function ($$v) {_vm.$set(_vm.task.dbconfig, "sourcetable", $$v)},expression:"task.dbconfig.sourcetable"}}),_vm._v(" "),_c('label',[_vm._v("源数据库ip:")]),_c('span',[_vm._v(_vm._s(_vm.task.dbconfig.databaseip))]),_vm._v(" "),_c('label',[_vm._v("源数据库端口:")]),_c('span',[_vm._v(_vm._s(_vm.task.dbconfig.databaseport))]),_vm._v(" "),_c('label',[_vm._v("源数据库:")]),_c('span',[_vm._v(_vm._s(_vm.task.dbconfig.database))])],1),_vm._v(" "),_c('h4',[_vm._v("数据预览")]),_vm._v(" "),(_vm.sourcetablecolums)?_c('div',{staticStyle:{"margin-left":"50px"}},[_c('span',[_vm._v("筛选原数据表中的数据")]),_vm._v(" "),_c('div',[_c('span',[_vm._v("sql:")]),_vm._v(_vm._s(_vm.task.dbconfig.condition))]),_vm._v(" "),_vm._l((_vm.task.dbconfig.conditionarr),function(item,index){return _c('filtertable',{key:index,attrs:{"sourcetablecolums":_vm.sourcetablecolums,"conditionindex":index},on:{"deleteindex":_vm.deletecondition,"onchange":_vm.conditionvaluechange}})}),_vm._v(" "),_c('div',[_c('el-button',{on:{"click":function($event){return _vm.addnewcondition()}}},[_vm._v("\n\t\t\t\t\t\t<添加>\n\t\t\t\t\t")])],1)],2):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"50px"}},[_c('el-table',{attrs:{"data":_vm.sourcetableData,"id":"smalltable","border":"","width":"100%"}},_vm._l((_vm.sourcetablecolums),function(col){return _c('el-table-column',{key:col.name,staticStyle:{"max-width":"160px"},attrs:{"label":col.name,"prop":col.name,"width":_vm.calcwidth(col.name)}})}),1)],1),_vm._v(" "),_c('div',[_c('div',[_c('span',[_vm._v("要执行的服务器")]),_vm._v(" "),_c('el-button',{attrs:{"size":"mini"},on:{"click":_vm.xorservers}},[_vm._v("反选")]),_vm._v(" "),_c('el-button',{attrs:{"size":"mini"},on:{"click":_vm.selectallservers}},[_vm._v("全选")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"50px"}},[_c('el-checkbox-group',{model:{value:(_vm.task.servers),callback:function ($$v) {_vm.$set(_vm.task, "servers", $$v)},expression:"task.servers"}},_vm._l((_vm.$store.state.servers),function(data,ind){return _c('el-checkbox',{key:ind,attrs:{"label":data.host_id,"keys":ind,"checked":true}})}),1)],1)]),_vm._v(" "),(Object.keys(_vm.task.args).length)?_c('div',[_c('div',[_vm._v("参数")]),_vm._v(" "),_vm._l((_vm.task.args),function(arg){return _c('div',{staticStyle:{"padding":"5px","margin-left":"50px"}},[_c('span',[_vm._v(_vm._s(arg.alisaname ? arg.alisaname : arg.name))]),_vm._v(" "),(arg.style=='radio')?[_vm._l((arg.options),function(opt){return [_c('el-radio',{attrs:{"label":opt.value},model:{value:(arg.value),callback:function ($$v) {_vm.$set(arg, "value", $$v)},expression:"arg.value"}},[_vm._v(_vm._s(opt.name))])]})]:_c('el-input',{staticStyle:{"width":"300px"},attrs:{"maxlength":"60","show-word-limit":""},model:{value:(arg.value),callback:function ($$v) {_vm.$set(arg, "value", $$v)},expression:"arg.value"}})],2)})],2):_vm._e(),_vm._v(" "),(Object.keys(_vm.task.inputcolums).length && _vm.sourcetablecolums.length)?_c('div',[_c('div',[_vm._v("数据输入")]),_vm._v(" "),_vm._l((_vm.task.inputcolums),function(inputcolum){return _c('div',{staticStyle:{"padding":"5px","margin-left":"50px"}},[_c('div',[_c('span',[_vm._v(_vm._s(inputcolum.name)+"<=")]),_vm._v(" "),_vm._l((_vm.sourcetablecolums),function(colum,index){return _c('el-radio',{key:index,attrs:{"label":colum.name},model:{value:(inputcolum.value),callback:function ($$v) {_vm.$set(inputcolum, "value", $$v)},expression:"inputcolum.value"}},[_vm._v(_vm._s(colum.name))])})],2),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.sourcetablecolumsarr.indexOf(inputcolum.value)==-1),expression:"sourcetablecolumsarr.indexOf(inputcolum.value)==-1"}],staticStyle:{"color":"red"}},[_vm._v("请选择字段")])])})],2):_vm._e(),_vm._v(" "),(Object.keys(_vm.task.outputcolums).length)?_c('div',[_c('div',[_vm._v("输出和字段调整")]),_vm._v(" "),_vm._l((_vm.task.outputcolums),function(outputcolum){return _c('div',{staticStyle:{"margin-left":"50px"}},[_c('div',{staticStyle:{"padding":"5px"}},[_vm._v("\n\t\t\t\t\t\t"+_vm._s(outputcolum.name)+"\n\t\t\t\t\t\t"),_c('el-radio',{attrs:{"label":"1"},model:{value:(outputcolum.addnewcolum),callback:function ($$v) {_vm.$set(outputcolum, "addnewcolum", $$v)},expression:"outputcolum.addnewcolum"}},[_vm._v("在原表新增字段")]),_vm._v(" "),_c('el-radio',{attrs:{"label":"0"},model:{value:(outputcolum.addnewcolum),callback:function ($$v) {_vm.$set(outputcolum, "addnewcolum", $$v)},expression:"outputcolum.addnewcolum"}},[_vm._v("使用原有字段")])],1),_vm._v(" "),(outputcolum.addnewcolum=='1')?_c('div',{staticStyle:{"padding":"5px"}},[_vm._v(_vm._s(outputcolum.name)+"=>"),_c('el-input',{staticStyle:{"width":"160px"},model:{value:(outputcolum.value),callback:function ($$v) {_vm.$set(outputcolum, "value", $$v)},expression:"outputcolum.value"}}),_vm._v("  "+_vm._s(_vm.dynamicalter(outputcolum)))],1):_vm._e(),_vm._v(" "),(outputcolum.addnewcolum=='0')?_c('div',{staticStyle:{"padding":"5px"}},_vm._l((_vm.sourcetablecolums),function(colum,index){return _c('el-radio',{key:index,attrs:{"label":colum.name},model:{value:(outputcolum.value),callback:function ($$v) {_vm.$set(outputcolum, "value", $$v)},expression:"outputcolum.value"}},[_vm._v(_vm._s(colum.name))])}),1):_vm._e()])})],2):_vm._e(),_vm._v(" "),(_vm.task.cron)?_c('div',[_c('span',[_c('el-checkbox',{model:{value:(_vm.task.cron.enabled),callback:function ($$v) {_vm.$set(_vm.task.cron, "enabled", $$v)},expression:"task.cron.enabled"}},[_vm._v("定时执行")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"50px"}},[_vm._v("\n\t\t\t\t定时执行条件:"),_c('el-input',{model:{value:(_vm.task.cron.expression),callback:function ($$v) {_vm.$set(_vm.task.cron, "expression", $$v)},expression:"task.cron.expression"}}),_vm._v("(和crontab 定时执行语法一致)\n\n\t\t\t")],1)]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"20px"}},[_c('div',[_vm._v("完成后通知:")]),_vm._v(" "),_c('el-checkbox-group',{staticStyle:{"margin-left":"50px"},model:{value:(_vm.task.atmobiles),callback:function ($$v) {_vm.$set(_vm.task, "atmobiles", $$v)},expression:"task.atmobiles"}},_vm._l((_vm.atmobilesoption),function(data,ind){return _c('el-checkbox',{key:ind,attrs:{"label":data,"keys":ind}})}),1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"200px","margin-top":"20px"}},[_c('el-button',{attrs:{"type":"primary","disabled":_vm.disablebutton},on:{"click":_vm.begintask}},[_vm._v("开始任务")])],1)])],1)}
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-row',[_c('el-col',{attrs:{"span":5}},[_c('div',[_c('div',[_c('el-button',{attrs:{"size":"mini","type":"primary","icon":"el-icon-arrow-" +( _vm.showform ? "up" : "down")},on:{"click":function($event){_vm.showform=_vm.showform^1}}})],1),_vm._v(" "),_c('el-form',{directives:[{name:"show",rawName:"v-show",value:(_vm.showform),expression:"showform"}],ref:"form",attrs:{"model":_vm.form,"rules":_vm.rules,"label-position":"left","label-width":"90px"}},[_c('el-form-item',{attrs:{"label":"host_id"}},[_c('el-input',{model:{value:(_vm.form.host_id),callback:function ($$v) {_vm.$set(_vm.form, "host_id", $$v)},expression:"form.host_id"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"ip"}},[_c('el-input',{model:{value:(_vm.form.ip),callback:function ($$v) {_vm.$set(_vm.form, "ip", $$v)},expression:"form.ip"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"username"}},[_c('el-input',{model:{value:(_vm.form.username),callback:function ($$v) {_vm.$set(_vm.form, "username", $$v)},expression:"form.username"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"password"}},[_c('el-input',{model:{value:(_vm.form.password),callback:function ($$v) {_vm.$set(_vm.form, "password", $$v)},expression:"form.password"}})],1),_vm._v(" "),_c('el-form-item',{attrs:{"label":"port"}},[_c('el-input',{model:{value:(_vm.form.port),callback:function ($$v) {_vm.$set(_vm.form, "port", $$v)},expression:"form.port"}})],1),_vm._v(" "),_c('el-form-item',[_c('el-button',{attrs:{"type":"primary"},on:{"click":_vm.onSubmit}},[_vm._v("提交")])],1)],1),_vm._v(" "),_c('el-table',{staticStyle:{"width":"100%"},attrs:{"data":_vm.$store.state.servers},on:{"cell-dblclick":_vm.connect}},[_c('el-table-column',{attrs:{"prop":"host_id","label":"host_id"}}),_vm._v(" "),_c('el-table-column',{attrs:{"prop":"ip","label":"ip"}}),_vm._v(" "),_c('el-table-column',{attrs:{"label":"操作"},scopedSlots:_vm._u([{key:"default",fn:function(scope){return [_c('el-button',{attrs:{"size":"mini"},on:{"click":function($event){return _vm.deleteserver(scope.$index, scope.row)}}},[_vm._v("X")])]}}])})],1)],1)]),_vm._v(" "),_c('el-col',{attrs:{"span":19}},[_c('el-tabs',{attrs:{"type":"card","editable":""},on:{"edit":_vm.handleTabsEdit},model:{value:(_vm.editableTabsValue),callback:function ($$v) {_vm.editableTabsValue=$$v},expression:"editableTabsValue"}},_vm._l((_vm.connections),function(item,index){return _c('el-tab-pane',{key:index,attrs:{"name":item.name}},[_c('span',{attrs:{"slot":"label"},slot:"label"},[_c('i',{class:item.status}),_vm._v(" "+_vm._s(item.name))]),_vm._v(" "),_c('myconsole',{ref:item.name,refInFor:true,attrs:{"item":item},on:{"sendmsg":function($event){return _vm.sendmsg($event,item.name)}}})],1)}),1),_vm._v(" "),_c('div',[_c('span',[_vm._v("命令:")]),_vm._v(" "),_c('el-input',{staticStyle:{"width":"600px"},attrs:{"id":"command"},model:{value:(_vm.command),callback:function ($$v) {_vm.command=$$v},expression:"command"}}),_c('el-button',{attrs:{"size":"mini","type":"primary"},on:{"click":_vm.execute}},[_vm._v("批量执行")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px"}},_vm._l((_vm.serverresult),function(item,ind){return _c('el-popover',{attrs:{"placement":"bottom","width":"400","trigger":"hover"}},[_c('div',[_vm._v(_vm._s(item.data))]),_vm._v(" "),_c('el-button',{staticClass:"item",attrs:{"slot":"reference","type":item.status==0 ? 'success' : item.status==-1 ? 'danger' : 'warning',"size":"mini"},slot:"reference"},[_vm._v(_vm._s(item.name))])],1)}),1)],1)],1)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
@@ -31163,7 +31168,7 @@ var content = __webpack_require__(213);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("2f40fec2", content, true, {});
+var update = __webpack_require__(6)("b17e4dbc", content, true, {});
 
 /***/ }),
 /* 283 */
@@ -31176,7 +31181,7 @@ var content = __webpack_require__(214);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("07f157c0", content, true, {});
+var update = __webpack_require__(6)("34b70bda", content, true, {});
 
 /***/ }),
 /* 284 */
@@ -31189,7 +31194,7 @@ var content = __webpack_require__(215);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("232e8910", content, true, {});
+var update = __webpack_require__(6)("485edf5b", content, true, {});
 
 /***/ }),
 /* 285 */
@@ -31202,7 +31207,7 @@ var content = __webpack_require__(216);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("2e5c431b", content, true, {});
+var update = __webpack_require__(6)("3e6b2a75", content, true, {});
 
 /***/ }),
 /* 286 */
@@ -31215,7 +31220,7 @@ var content = __webpack_require__(217);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("1a1071bc", content, true, {});
+var update = __webpack_require__(6)("170de9ec", content, true, {});
 
 /***/ }),
 /* 287 */
@@ -31228,7 +31233,7 @@ var content = __webpack_require__(218);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("069f9aa3", content, true, {});
+var update = __webpack_require__(6)("2ab5bd6d", content, true, {});
 
 /***/ }),
 /* 288 */
@@ -31254,7 +31259,7 @@ var content = __webpack_require__(220);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("7cacf583", content, true, {});
+var update = __webpack_require__(6)("4132d8ea", content, true, {});
 
 /***/ }),
 /* 290 */
@@ -31267,7 +31272,7 @@ var content = __webpack_require__(221);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("df566df8", content, true, {});
+var update = __webpack_require__(6)("19e331e8", content, true, {});
 
 /***/ }),
 /* 291 */
@@ -31331,4 +31336,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[146]);
-//# sourceMappingURL=index.js.map?bfb5ee45464f8b91e8e6
+//# sourceMappingURL=index.js.map?3d87e708086befff2354

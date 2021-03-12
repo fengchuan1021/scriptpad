@@ -72,7 +72,7 @@
 			},
 			switchcrontab(nval){
 				let pk=this.task.pk;
-				this.$axios.put('/api/crontab/'+pk+'/',{'status':nval}).then(ret=>{
+				this.$axios.put('api/crontab/'+pk+'/',{'status':nval}).then(ret=>{
 					this.$notify({
 						title: ret.data.title,
 						type: 'success',
@@ -83,7 +83,7 @@
 			},
 			update() {
 			
-				this.$axios.get('/api/crontab/').then(ret => {
+				this.$axios.get('api/crontab/').then(ret => {
 					this.datas=ret.data;
 				
 				});
@@ -92,7 +92,7 @@
 			deletecrontab(ind, item) {
 				let pk=item.pk;
 				console.log(item);
-				this.$axios.delete('/api/crontab/' + pk + '/').then(ret => {
+				this.$axios.delete('api/crontab/' + pk + '/').then(ret => {
 					
 					if (ret.status && ret.status == 200) {
 						this.datas.splice(ind, 1);
