@@ -57,7 +57,7 @@ ROOT_URLCONF = 'scriptpad.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'doc')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -111,7 +111,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-os.path.join(BASE_DIR, 'templates')       #通过和项目根路径拼接得到static的路径
+os.path.join(BASE_DIR, 'doc')       #通过和项目根路径拼接得到static的路径
 ]
 REST_FRAMEWORK = {
 
