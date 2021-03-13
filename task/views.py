@@ -5,6 +5,7 @@ import os,json,psutil
 import task.script as script
 import re
 import asyncio
+import sys
 from task.serializers import historyserializer,TaskSerializer,Vpserializer
 from task.models import TaskHistory
 from task.models import Vp as Vpmodel
@@ -27,8 +28,8 @@ class Task(APIView):
         return Response(serializer.data)
     def post(self,request):
         arr=["ok"]
-        print(request.data)
-        cmd = ["python"] if os.name=="nt" else ["/home/ant/conda/bin/python"]
+
+        cmd=sys.executable
 
         tmp = {f.name: request.data.get(f.name) for f in TaskHistory._meta.fields if f.name in request.data}
 
@@ -36,11 +37,11 @@ class Task(APIView):
         history.save()
         request.data['taskid']=history.id
         cmd += [os.path.join(settings.BASE_DIR, 'task','script', request.data['filename']), json.dumps(request.data)]
-        print(cmd)
+
         psutil.Popen(cmd)
         cmd[-1]=f"'{cmd[-1]}'"
         if (request.data['cron']['enabled']):
-            cron = CronTab(user='ant')
+            cron = CronTab(user= getpass.getuser())
             job = cron.new(command=' '.join(cmd),comment='sp'+str(history.id))
             job.setall(request.data['cron']['expression'])
             cron.write()
@@ -118,7 +119,7 @@ def killtask(request,taskid,listname):
         print(e)
 
     try:
-        cmd = ["python"] if os.name == "nt" else ["/home/ant/conda/bin/python"]
+        cmd=sys.executable
         cmd += [os.path.join(settings.BASE_DIR, 'task', 'basetask.py'), 'killtask',listname]
         psutil.Popen(cmd)
     except Exception as e:
@@ -139,10 +140,11 @@ class Vp(viewsets.ModelViewSet):
     serializer_class = Vpserializer
     queryset = Vpmodel.objects.all()
 from datetime import datetime
+import getpass
 class crontab(APIView):
     http_method_names = ['get', 'put', 'delete']
     def put(self,request,pk):
-        cron = CronTab(user='ant')
+        cron = CronTab(user= getpass.getuser())
         print(pk)
         it = cron.find_comment('sp'+pk)
         item=it.__next__()
@@ -154,7 +156,7 @@ class crontab(APIView):
         msg=f'{msg}任务成功'
         return Response({'title':msg,'msg':msg})
     def delete(self,request,pk):
-        cron = CronTab(user='ant')
+        cron = CronTab(user= getpass.getuser())
         it = cron.find_comment('sp'+pk)
         item=it.__next__()
         item.delete()
@@ -162,7 +164,7 @@ class crontab(APIView):
         msg=f'删除任务成功'
         return Response({'title':msg,'msg':msg})
     def get(self, request):
-        cron = CronTab(user='ant')
+        cron = CronTab(user= getpass.getuser())
         it = cron.find_comment(re.compile(r'sp(\d+)'))
         arr=[]
         for item in it:
