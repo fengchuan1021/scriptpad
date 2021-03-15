@@ -1,4 +1,13 @@
-# scriptpad
-#DEMO https://fengchuan1021.github.io/scriptpad/
-#异步爬虫，脚本管理框架
-#web页面格式化脚本的输入输出，数据预览，调整数据库字段。
+##### DEMO https://fengchuan1021.github.io/scriptpad/
+
+async python script manage framework.
+
+a webgui to  format input,output. instead of using optionParser module. 
+
+manage servers.
+
+using git distribue scripts to each server. and keep the last version.
+
+chose which server to run your script.
+
+record script execute history.
