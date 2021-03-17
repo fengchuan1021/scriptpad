@@ -63,19 +63,8 @@
 				   
 				  </el-tab-pane>
 		</el-tabs>
-		<div>
-			<span>命令:</span>
-			<el-input style='width: 600px;' v-model="command" id='command'></el-input><el-button size="mini" type='primary' @click='execute'>批量执行</el-button>
-		</div>
-		<div style='margin-top: 10px;'>
-			<el-popover
-			  placement="bottom"
-			  width="400"
-			  trigger="hover" v-for='(item,ind) in serverresult'>
-			  <div>{{item.data}}</div>
-			<el-button slot="reference" :type="item.status==0 ? 'success' : item.status==-1 ? 'danger' : 'warning'" class='item' size="mini">{{item.name}}</el-button>
-			</el-popover>
-		</div>
+
+
 	</el-col>
 </el-row>
 </template>
@@ -150,41 +139,29 @@
 			setserverresult(){
 				this.serverresult=[];
 			try{
+			
 				for(let item of this.$store.state.servers){
 					
 					this.serverresult.push({'data':'','status':1,name:item.host_id});
 				}
 			}catch(e){
+				console.log(e);
 				console.log('errorno servers');
-				//TODO handle the exception
+			
 			}
 				
 			
 			},
-			execute(){
-			
-				this.serverresult=[];
-				var evtSource = new EventSource('api/executecommand/'+this.command);
-				var vue=this;
-				evtSource.onmessage = function(e) {
-					let js=JSON.parse(e.data);
-					if (js.closed==1){
-						console.log('closed');
-						evtSource.close();
-					}else{
-						vue.serverresult.push(js);
-					}
-				}
-				
-				
-			},
+
 			onSubmit() {
 				this.$refs.form.validate((valid) => {
 					if (valid) {
-						this.$axios.post('api/vp/', this.form).then(ret => {
+						this.$axios.post(DOMAIN+'api/vp/', this.form).then(ret => {
 							if (ret.data && ret.data.id) {
 								let tmp = this.$store.state.servers;
+							
 								tmp.unshift(ret.data);
+								
 								this.$store.commit('setServers', tmp);
 								this.form.host_id = '';
 								this.form.ip = '';
@@ -204,12 +181,12 @@
 				});
 			},
 			update() {
-				this.reconnect();
-				this.$axios.get('api/vp/').then(ret => {
-					// console.log(ret.data);
-					this.$store.commit('setServers', ret.data.results);
+			//	this.reconnect();
+				this.$axios.get(DOMAIN+'api/vp/').then(ret => {
+					
+					this.$store.commit('setServers', ret.data);
 					this.setserverresult();
-					//this.datas=ret.data.results;
+					
 				});
 			},
 			findhost(name){
@@ -277,7 +254,7 @@
 			},
 			deleteserver(ind, item) {
 
-				this.$axios.delete('api/vp/' + item.id + '/').then(ret => {
+				this.$axios.delete(DOMAIN+'api/vp/' + item.id + '/').then(ret => {
 					if (ret.status && ret.status == 204) {
 						//this.datas.splice(ind,1);
 						let tmp = this.$store.state.servers;
