@@ -24,11 +24,14 @@
   </template>
 
 <script>
+	
 	import servers from "./servers";
 	import history from "./history";
 	import scriptlist from './scriptlist';
 	import crontab from './crontab';
-	
+
+		  
+
 	
 export default {
 	 components: {

@@ -183,8 +183,13 @@
 			update() {
 			//	this.reconnect();
 				this.$axios.get(DOMAIN+'api/vp/').then(ret => {
-					
-					this.$store.commit('setServers', ret.data);
+			
+					if(ret.data.results)
+						this.$store.commit('setServers', ret.data.results);
+					else  if(ret.data)
+						this.$store.commit('setServers', ret.data);
+				
+						
 					this.setserverresult();
 					
 				});

@@ -1,0 +1,47 @@
+import aioredis, asyncio
+
+
+class Redis(object):
+
+    async def connect(self):
+        self.closed = 0
+        if 1:
+            while 1:
+                try:
+                    self.redis = await aioredis.create_redis_pool('redis://:Wafwcs_1224!!@123.57.175.47:6379/6')
+                    return self
+                except Exception as e:
+                    await asyncio.sleep(3)
+                    print(e)
+        return self
+
+    def __await__(self):
+        return self.connect().__await__()
+
+    def __del__(self):
+        if self.closed == 0:
+            asyncio.get_event_loop().run_until_complete(self.close())
+
+    async def close(self):
+        if self.closed == 0:
+            self.closed = 1
+            self.redis.close()
+            await self.redis.wait_closed()
+
+    def __getattr__(self, *args, **kwargs):
+        def decoratefunction(*args1):
+
+            async def infunction(*args2, **kwargs2):
+                while 1:
+                    try:
+                        return await getattr(self.redis, args1[0])(*args2, **kwargs2)
+                    except Exception as e:
+                        print(e)
+                        await asyncio.sleep(2)
+
+            return infunction
+
+        return decoratefunction(*args)
+
+    def pipeline(self):
+        return self.redis.pipeline()
