@@ -463,7 +463,7 @@
 
 			},
 			tablenamesearch(queryString, cb) {
-				this.$axios.get('api/tablesearch/?sourcetable=' + this.task.dbconfig.sourcetable).then(ret => {
+				this.$axios.get(DOMAIN+'api/tablesearch/?sourcetable=' + this.task.dbconfig.sourcetable).then(ret => {
 					cb(ret.data);
 				});
 
